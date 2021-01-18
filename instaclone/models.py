@@ -1,102 +1,75 @@
-from django.db import models
-import datetime as dt
+# -*- coding: utf-8 -*-
+# from __future__ import unicode_literals
 from django.contrib.auth.models import User
-from tinymce.models import HTMLField
-import cloudinary
+from django.db import models
 from cloudinary.models import CloudinaryField
+
 
 # Create your models here.
 
 class Profile(models.Model):
-    # form.instance.user = Profile.objects.get(user=self.request.user)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(blank=True)
-    photo = CloudinaryField('image')
+    profilephoto = CloudinaryField('profilesss')
+    Bio = models.CharField(max_length=100)
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    following = models.ManyToManyField(User,blank=True,related_name='follow')
+
+    def __str__(self):
+        return self.user.username
+
+
     
     def save_profile(self):
-        self.save()
-        
-    def delete_profile(self):
-        self.delete()
-        
-    
-    @classmethod
-    def get_profile(request, id):
-        try:
-            profile = Profile.objects.get(pk = id)
-            print(image)
-            
-        except ObjectDoesNotExist:
-            raise Http404()
-        
-        return profile
-        
-    @classmethod
-    def update_profile(cls, id, value):
-        cls.objects.filter(id=id).update(name = value)
-        
-    def __str__(self):
-        return self.bio 
+        self.user
 
+    def delete_profile(self):
+        self.delete()    
+
+
+    @classmethod
+    def search_profile(cls, name):
+        return cls.objects.filter(user__username__icontains=name).all()
+
+class Followwww(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    followers = models.CharField(max_length=30)        
 
 class Image(models.Model):
-    image = CloudinaryField('image')
-    image_name = models.CharField(max_length=255)
-    description = models.TextField()
-    pub_date = models.DateTimeField(auto_now_add=True)
-    Author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
-    author_profile = models.ForeignKey(Profile,on_delete=models.CASCADE, null=True)
-    likes = models.ManyToManyField(User, related_name = 'likes', blank = True)
+    image = CloudinaryField('images')
+    imageName = models.CharField(max_length=30,blank=True)
+    imageCaption = models.CharField(max_length=300)
+    profile = models.ForeignKey(Profile,on_delete = models.CASCADE)
+    likes = models.ManyToManyField(User, related_name='likes', blank=True, )
+    comments = models.CharField(max_length=30,blank=True)
+
+    def savePost(self):
+        print(self)
+        return self.save()
+
     
-    
-    def save_image(self):
-        self.save()
-    
+    @property
+    def get_all_comments(self):
+        return self.comments.all()
+
     def delete_image(self):
         self.delete()
-        
-    def total_likes(self):
-        return self.likes.count()
-        
-    @classmethod
-    def update_image(cls, id, value):
-        cls.objects.filter(id=id).update(image=value)
-    
-    @classmethod
-    def get_image(request, id):
-        try:
-            image = Image.objects.get(pk = id)
-            print(image)
-            
-        except ObjectDoesNotExist:
-            raise Http404()
-        
-        return image
-    
-    @classmethod
-    def search_by_author(cls, Author):
-        images = cls.objects.filter(Author__user__icontains=Author)
-        return images
 
-  
+    def total_likes(self):
+        return self.likes.count()    
+
+
     def __str__(self):
-        return self.image_name 
-    
+        return self.imageName    
+
 class Comment(models.Model):
-    comment = models.TextField(blank=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ForeignKey(Image, on_delete=models.CASCADE )
-    pub_date = models.DateTimeField(auto_now_add=True)
-    
+    comment = models.TextField()
+    postt= models.ForeignKey(Image, on_delete=models.CASCADE)
+    userr= models.ForeignKey(Profile, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+
+
     def save_comment(self):
-        self.save()
-        
+        self.user
+
     def delete_comment(self):
         self.delete()
-        
-    @classmethod
-    def update_comment(cls, id, value):
-        cls.objects.filter(id=id).update(name = value)
-        
-    def __str__(self):
-        return self.comment
+
