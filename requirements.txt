@@ -1,0 +1,12 @@
+asgiref==3.3.1
+confusable-homoglyphs==3.2.0
+Django==3.1.5
+django-bootstrap3==14.2.0
+django-class-auth-views==1.0.2
+django-registration==2.4.1
+django-tinymce==3.2.0
+django-user-sessions==1.7.1
+django-utils-six==2.0
+python-decouple==3.4
+pytz==2020.5
+sqlparse==0.4.1
