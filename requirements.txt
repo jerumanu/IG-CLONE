@@ -11,6 +11,7 @@ django-registration==3.1.1
 django-tinymce==3.2.0
 django-user-sessions==1.7.1
 django-utils-six==2.0
+gunicorn==20.0.4
 psycopg2==2.8.6
 python-decouple==3.4
 pytz==2020.5
