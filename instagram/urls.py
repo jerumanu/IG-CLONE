@@ -21,8 +21,10 @@ from django.contrib.auth import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('instaclone.urls')),
-    path('accounts/', include('django_registration.backends.one_step.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
-    # path('',include('insta.url')),
+    # path('accounts/', include('django_registration.backends.one_step.urls')),
+    # path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('registration.backends.simple.urls')),
+    path('logout/', views.logout_then_login, {"next_page": 'accounts/register'}),
+   
   
 ]
